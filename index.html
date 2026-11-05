@@ -500,7 +500,7 @@
   function fechaCorta(iso) { var p = iso.split("-"); return p[2] + "/" + p[1]; }
   var tt;
   var ICONO_CAMPANA = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
-  function toast(t) { var el = $("toast"); el.textContent = t; el.hidden = false; clearTimeout(tt); tt = setTimeout(function() { el.hidden = true; }, 2400); }
+  function toast(t) { var el = $("toast"); el.textContent = t; el.hidden = false; clearTimeout(tt); tt = setTimeout(function() { el.hidden = true; }, Math.max(2400, String(t).length * 60)); }
   function nombreFamilia(mayuscula) {
     var t = D.familia.trim() ? "la familia " + D.familia.trim().replace(/^familia\s+/i, "") : "nuestra familia";
     return mayuscula ? t.charAt(0).toUpperCase() + t.slice(1) : t;
@@ -1187,7 +1187,7 @@
     });
   }
   function activarAvisos(boton) {
-    if (esIOS && !esInstalada) { verAcceso = true; ir("ajustes"); toast("En iPhone, primero agregá la app a la pantalla de inicio."); return; }
+    if (esIOS && !esInstalada) { toast("En iPhone, primero agregá la app a la pantalla de inicio (Compartir → Agregar a inicio) y abrila desde el ícono."); return; }
     if (!avisos.listo) { toast("Un momento, se está preparando…"); return; }
     if (boton) { boton.disabled = true; boton.textContent = "Activando…"; }
     var OS = avisos.os;
@@ -1215,7 +1215,7 @@
   function tarjetaAvisosAjustes() {
     if (!avisosPosibles()) return "";
     var estado = avisos.activos ? '<p class="ok-avisos">Avisos activados en este celular.</p>'
-      : (esIOS && !esInstalada) ? '<p class="sub" style="margin:0">En iPhone, primero agregá la app a la pantalla de inicio (abajo están los pasos) y abrila desde el ícono.</p>'
+      : (esIOS && !esInstalada) ? '<p class="sub" style="margin:0">En iPhone, primero agregá la app a la pantalla de inicio desde Safari (Compartir → Agregar a inicio) y abrila desde el ícono.</p>'
       : (avisos.listo && !avisos.soportado) ? '<p class="sub" style="margin:0">Este navegador no permite avisos. Abrí la app en Chrome.</p>'
       : '<button type="button" class="btn btn-oro w100" data-accion="activar-avisos">Activar avisos</button>';
     return '<div class="tarjeta pila"><h2 class="con-icono">' + ICONO_CAMPANA + 'Avisos en el celular</h2>' +
@@ -1247,7 +1247,7 @@
     return '<div class="marca"><span class="pincel">Ajustes</span></div>' +
       tarjetaFamilia() +
       bloqueHorario("Día y hora del altar") +
-      tarjetaAvisosAjustes() + tarjetaLetra() + tarjetaAcceso() +
+      tarjetaAvisosAjustes() + tarjetaLetra() +
       '<div class="tarjeta pila"><h2 class="con-icono">' + ICONO_ENGRANAJE + 'Reiniciar</h2>' +
       '<p class="sub" style="margin:0">Si encendieron el altar por error, pueden volver a la semana anterior y hacerlo de nuevo. Las semanas que ya hicieron no se borran.</p>' +
       '<button type="button" class="btn btn-borde w100" data-accion="semana-anterior">Volver a la semana anterior</button></div>';
