@@ -281,6 +281,7 @@
   .modal { width: 100%; max-width: 380px; background: var(--noche-2); border: 1px solid var(--linea); border-radius: 22px; padding: 22px 20px 18px; display: grid; gap: 12px; box-shadow: 0 24px 60px rgba(0, 0, 0, .45); }
   .modal h2 { margin: 0; font-family: var(--f-lectura); font-size: 22px; color: var(--oro-claro); }
   .modal p { margin: 0; line-height: 1.55; color: var(--crema); }
+  .version-app { text-align: center; font-size: 12.5px; color: var(--crema); opacity: .45; margin: 6px 0 0; }
   .modal-uncion { max-width: 400px; padding: 14px 14px 16px; text-align: center; }
   .modal-uncion img { width: 100%; max-height: 58vh; object-fit: contain; border-radius: 14px; display: block; }
   .modal-uncion h2 { font-size: 24px; }
@@ -1143,7 +1144,8 @@
       '<div class="tarjeta">' + (lista.length ? lista.map(function(p) {
         return '<div class="peticion"><div class="peticion-t"><b>' + esc(p.por) + '</b><small>' + (p.respondida ? "" : "desde el " + fechaCorta(p.creada)) + '</small></div>' +
           (p.motivo ? '<p>' + esc(p.motivo) + '</p>' : "") +
-          (p.respondida ? '<span class="respondida">✓ Dios respondió el ' + fechaCorta(p.respondida) + '</span>' + (p.testimonio ? '<p style="font-style:italic"><b style="font-style:normal">Testimonio:</b> «' + esc(p.testimonio) + '»</p>' : "") :
+          (p.respondida ? '<span class="respondida">✓ Dios respondió el ' + fechaCorta(p.respondida) + '</span>' + (p.testimonio ? '<p style="font-style:italic"><b style="font-style:normal">Testimonio:</b> «' + esc(p.testimonio) + '»</p>' : "") +
+            '<div class="fila" style="align-items:center"><button type="button" class="peligro" data-borrar-pet="' + p.id + '">Borrar</button></div>' :
             '<div class="fila" style="align-items:center;gap:14px"><button type="button" class="btn btn-borde btn-chico" data-responder="' + p.id + '">Dios respondió</button><button type="button" class="peligro" data-borrar-pet="' + p.id + '">Borrar</button></div>' +
             '<div id="resp-' + p.id + '" hidden><input class="campo" id="testi-' + p.id + '" placeholder="Testimonio: ¿cómo respondió Dios? (opcional)"><button type="button" class="btn btn-oro btn-chico" style="margin-top:8px" data-confirmar-resp="' + p.id + '">Guardar testimonio</button></div>') +
           '</div>';
@@ -1264,7 +1266,8 @@
       tarjetaLetra() +
       '<div class="tarjeta pila"><h2 class="con-icono">' + ICONO_ENGRANAJE + 'Reiniciar</h2>' +
       '<p class="sub" style="margin:0">Si encendieron el altar por error, pueden volver a la semana anterior y hacerlo de nuevo. Las semanas que ya hicieron no se borran.</p>' +
-      '<button type="button" class="btn btn-borde w100" data-accion="semana-anterior">Volver a la semana anterior</button></div>';
+      '<button type="button" class="btn btn-borde w100" data-accion="semana-anterior">Volver a la semana anterior</button></div>' +
+      '<p class="version-app">Versión ' + VERSION_APP + '</p>';
   }
   function leerFamilia() { var a = $("famNombre"); if (a) D.familia = a.value.trim(); var b = $("famDir"); if (b) D.direccion = b.value.trim(); }
 
@@ -1295,7 +1298,15 @@
   }
   // ---------- "¿Ya ungiste tu casa?" ----------
   // Sale cada vez que abren la app hasta que contesten "Sí". La respuesta se guarda en la planilla (panel).
-  var uncionMostrada = false;
+  var VERSION_APP = "13/11 · 2";
+  var uncionMostrada = false, ocultaDesde = 0;
+  // La app instalada muchas veces no se vuelve a cargar: queda abierta en segundo plano. Si vuelven a
+  // entrar después de más de 5 minutos, se cuenta como una entrada nueva y el cartel vuelve a salir.
+  document.addEventListener("visibilitychange", function() {
+    if (document.hidden) { ocultaDesde = Date.now(); return; }
+    if (ocultaDesde && Date.now() - ocultaDesde > 5 * 60000) { uncionMostrada = false; if (vista === "inicio") setTimeout(revisarUncion, 500); }
+    ocultaDesde = 0;
+  });
   function revisarUncion() {
     if (uncionMostrada || D.ungida || D.enCurso || vista !== "inicio" || !configurado()) return;
     if (hayServidor && D.acceso !== "aceptada") return;
