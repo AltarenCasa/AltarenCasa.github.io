@@ -23,8 +23,8 @@
 
 window.ALTAR_KIDS = {
 
-  // Lunes en que arrancó la semana 1. Cada lunes se habilita la semana siguiente.
-  INICIO: "2026-11-09",
+  // Cada familia arranca en la semana 1 el día que entra a la app.
+  // Cada lunes se le habilita la semana siguiente.
 
   TOTAL_FIGURITAS: 52,
 
@@ -49,12 +49,6 @@ window.ALTAR_KIDS = {
     { t: "Nos entregamos",    o: "Te entrego mi vida y mi corazón. Quiero hacer tu voluntad. En el nombre de Jesús, amén." }
   ],
   MODELO_PADRES: "Un adulto dice cada parte y los chicos repiten. Los más grandes pueden decir la oración con sus propias palabras. Si alguien tiene un pedido especial, oren por eso en «Oramos por otros».",
-
-  // Cierre de todas las semanas, como en Altar en Casa
-  BENDICION: {
-    texto: "Jehová te bendiga, y te guarde; Jehová haga resplandecer su rostro sobre ti, y tenga de ti misericordia; Jehová alce sobre ti su rostro, y ponga en ti paz.",
-    cita: "Números 6:24-26"
-  },
 
   SEMANAS: [
     {
@@ -117,7 +111,7 @@ window.ALTAR_KIDS = {
 
       adoramos: {
         oracion: "Señor, te adoramos porque eres santo y fiel. Tú cuidaste a Jacob en el camino y nos cuidas a nosotros en esta casa. Ciertamente tú estás en este lugar. ¡Bendito sea tu nombre para siempre!",
-        padres: "Que cada uno diga una razón para adorar a Dios y una cosa por la que está agradecido esta semana. Terminen con la bendición."
+        padres: "Que cada uno diga una razón para adorar a Dios y una cosa por la que está agradecido esta semana."
       }
     },
 
@@ -181,7 +175,7 @@ window.ALTAR_KIDS = {
 
       adoramos: {
         oracion: "Señor, te adoramos porque eres poderoso. No hay nada imposible para ti: abriste el mar y salvaste a tu pueblo. Tú peleas por nosotros. ¡Grande es el Señor y digno de alabanza!",
-        padres: "Que cada uno diga una razón para adorar a Dios y una cosa por la que está agradecido esta semana. Terminen con la bendición."
+        padres: "Que cada uno diga una razón para adorar a Dios y una cosa por la que está agradecido esta semana."
       }
     }
   ]
@@ -468,7 +462,9 @@ function hoyISO(){var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffs
 function parse(s){var p=s.split("-").map(Number);return new Date(p[0],p[1]-1,p[2])}
 function lunes(d){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());var w=(x.getDay()+6)%7;x.setDate(x.getDate()-w);return x}
 function claveSemana(d){var l=lunes(d);return l.getFullYear()+"-"+(l.getMonth()+1)+"-"+l.getDate()}
-function semanasDesdeInicio(){return Math.floor((lunes(new Date())-lunes(parse(C.INICIO)))/(7*864e5))}
+// Cada familia arranca en la semana 1 el día que entra a la app; cada lunes se le habilita la siguiente.
+if(S.familia&&!S.inicio){S.inicio=hoyISO();guardar()}
+function semanasDesdeInicio(){return Math.max(0,Math.floor((lunes(new Date())-lunes(parse(S.inicio||hoyISO())))/(7*864e5)))}
 function habilitadas(){var n=semanasDesdeInicio()+1;return SEM.filter(function(s){return s.n<=Math.max(1,n)})}
 function actual(){var h=habilitadas();return h[h.length-1]||SEM[0]}
 function hizo(id){return S.hechos.some(function(h){return h.id===id})}
@@ -541,8 +537,7 @@ function vRecorrido(){
       '<ul class="puntos">'+v.puntos.map(function(p){return '<li>'+esc(p)+'</li>'}).join("")+'</ul>';guia=v.padres}
     if(k==="conversamos"){var cv=s.conversamos;cuerpo='<p class="intro">Conversamos sobre lo que aprendimos.</p><ol class="preguntas">'+cv.preguntas.map(function(q,i){return '<li data-n="'+(i+1)+'">'+esc(q)+'</li>'}).join("")+'</ol>';guia=cv.padres}
     if(k==="oramos"){cuerpo='<p class="intro">Oramos juntos con este modelo. Cada parte es una forma de hablar con Dios.</p>'+modeloOracion(s.agradecemos);guia=C.MODELO_PADRES}
-    if(k==="adoramos"){cuerpo='<p class="intro">Oramos y adoramos al Señor.</p><p class="oracion">'+esc(s.adoramos.oracion)+'</p>'+
-      '<div class="verso bend"><small>Bendición</small><q>'+esc(C.BENDICION.texto)+'</q><cite>'+esc(C.BENDICION.cita)+'</cite></div>';guia=s.adoramos.padres}
+    if(k==="adoramos"){cuerpo='<p class="intro">Oramos y adoramos al Señor.</p><p class="oracion">'+esc(s.adoramos.oracion)+'</p>';guia=s.adoramos.padres}
   }
   var ultimo=(R.p===PASOS.length-1);
   return '<div class="rec">'+vis+'<div class="barra"><button class="redondo" data-a="salir" aria-label="Salir">'+I.x+'</button><div class="segs">'+segs+'</div>'+
@@ -671,13 +666,13 @@ document.addEventListener("click",function(ev){
   else if(a==="copiar"){var u=location.href.split("#")[0];var p=navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(u):Promise.reject();p.then(function(){toast("Link copiado")},function(){toast(u)})}
   else if(a==="reiniciar"){
     if(!b.classList.contains("armado")){b.classList.add("armado");b.textContent="Tocá de nuevo para borrar";setTimeout(function(){if(b.isConnected){b.classList.remove("armado");b.textContent="Borrar progreso"}},3500);return}
-    S.hechos=[];guardar();toast("Progreso borrado");pintar();
+    S.hechos=[];S.inicio=hoyISO();guardar();toast("Progreso borrado. Empiezan de nuevo en la semana 1.");pintar();
   }
 });
 document.addEventListener("submit",function(ev){
   ev.preventDefault();var f=ev.target,fd=new FormData(f);
   var fam=(fd.get("familia")||"").trim(),ch=(fd.get("chicos")||"").trim();if(!fam||!ch)return;
-  S.familia=fam;S.chicos=ch;guardar();
+  S.familia=fam;S.chicos=ch;if(!S.inicio)S.inicio=hoyISO();guardar();
   if(f.id==="f-fam")toast("Guardado");
   vista="altar";pintar();
 });
