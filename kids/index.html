@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Altar Kids</title>
+<meta name="description" content="El altar en familia para los más chicos de la Iglesia Altar.">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#171B48">
+<link rel="icon" href="icono-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Altar Kids">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="contenido.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+/* Layout: app para el celular. Inicio crema con tarjeta de la semana; recorrido a pantalla completa (imagen arriba, tarjeta abajo); final en azul noche. Un solo tema a propósito, como el diseño. */
+:root{
+  --crema:#FBF6EE; --crema-2:#F3EBDD; --blanco:#FFFFFF; --linea:#EADFCC;
+  --tinta:#1E2235; --suave:#6B6577; --tenue:#9A93A3;
+  --noche:#171B48; --noche-2:#1F2459; --noche-3:#2A3070;
+  --naranja:#FF7A2F; --naranja-2:#FFB23E; --naranja-txt:#E8621A; --naranja-suave:#FFE9D6;
+  --oro:#FFD27A;
+  --grad:linear-gradient(90deg,var(--naranja),var(--naranja-2));
+  --sombra:0 2px 10px rgba(60,40,20,.08);
+  --f:"Nunito", ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--crema);color:var(--tinta);font:600 16px/1.45 var(--f);-webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+img{max-width:100%;display:block}
+:focus-visible{outline:3px solid var(--naranja);outline-offset:2px}
+
+/* ---------- pantallas con barra de navegación ---------- */
+.pag{max-width:520px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px));padding-block:calc(14px + env(safe-area-inset-top,0px)) calc(110px + env(safe-area-inset-bottom,0px))}
+.saludo{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.saludo small{display:block;color:var(--suave);font-size:14px;font-weight:700}
+.saludo h1{margin:0;font-size:28px;font-weight:900;letter-spacing:-.01em;line-height:1.1}
+.saludo img{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 4px 10px rgba(255,122,47,.35));animation:flota 3.2s ease-in-out infinite}
+@keyframes flota{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+.semana{margin-top:18px;position:relative;border-radius:28px;overflow:hidden;background:var(--noche);box-shadow:0 14px 30px rgba(23,27,72,.28);min-height:430px;display:flex;flex-direction:column;justify-content:flex-end}
+.semana > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.semana::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(23,27,72,0) 35%,rgba(23,27,72,.55) 60%,rgba(23,27,72,.96) 100%)}
+.semana .txt{position:relative;z-index:1;padding:18px 18px 18px;color:#fff}
+.chip{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#fff;font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:5px 12px}
+.semana h2{margin:10px 0 2px;font-size:29px;line-height:1.08;font-weight:900;letter-spacing:-.01em;text-wrap:balance}
+.semana p{margin:0;opacity:.85;font-size:15px}
+.cta{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border:0;border-radius:18px;background:var(--grad);color:#fff;font-size:19px;font-weight:900;box-shadow:0 8px 18px rgba(255,122,47,.35);margin-top:16px}
+.cta svg{width:18px;height:18px}
+.cta.chico{min-height:48px;font-size:17px;margin-top:0}
+.hecho{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:14px;font-weight:800;color:var(--oro)}
+
+.titulo{font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--suave);margin:24px 0 10px}
+.momentos{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mom{background:var(--blanco);border:1.5px solid var(--linea);border-radius:18px;padding:12px 4px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;font-weight:800;color:var(--tinta);min-width:0}
+.mom svg{width:24px;height:24px;color:var(--naranja-txt)}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.stat{background:var(--blanco);border:1.5px solid var(--linea);border-radius:20px;padding:12px 14px;display:flex;align-items:center;gap:12px;min-width:0;text-align:left}
+.stat img{width:48px;height:48px;object-fit:contain;flex:none}
+.stat img.fig{object-fit:cover;border-radius:10px}
+.stat b{display:block;font-size:24px;font-weight:900;line-height:1}
+.stat b small{font-size:15px;color:var(--suave);font-weight:800}
+.stat span{font-size:14px;color:var(--suave);font-weight:700;line-height:1.2}
+.otras{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.otras::-webkit-scrollbar{display:none}
+.otra{flex:none;width:150px;background:var(--blanco);border:1.5px solid var(--linea);border-radius:18px;overflow:hidden;text-align:left;padding:0}
+.otra img{width:100%;height:96px;object-fit:cover}
+.otra div{padding:8px 10px 10px}
+.otra small{display:block;font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--naranja-txt)}
+.otra b{display:block;font-size:14px;font-weight:800;line-height:1.2}
+
+/* barra inferior */
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(484px,calc(100% - 36px));background:var(--tinta);border-radius:24px;display:grid;grid-template-columns:repeat(3,1fr);padding:6px;z-index:20;box-shadow:0 10px 24px rgba(30,34,53,.3)}
+.nav button{background:none;border:0;border-radius:18px;color:#A9A6B8;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;font-weight:800;padding:8px 0;min-height:56px}
+.nav button svg{width:24px;height:24px}
+.nav button.on{color:#fff}
+.nav button.on svg{color:var(--naranja-2)}
+
+/* ---------- recorrido ---------- */
+.rec{position:fixed;inset:0;z-index:30;background:var(--noche);display:flex;flex-direction:column}
+.vis{position:relative;flex:1 1 auto;min-height:38%;overflow:hidden}
+.vis > img.esc{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;animation:entra .5s ease-out}
+.vis.pose{background:radial-gradient(60% 55% at 50% 55%,rgba(255,150,60,.35),transparent 70%),linear-gradient(180deg,var(--noche-2),var(--noche))}
+.vis.pose > img{position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);height:min(72%,320px);width:auto;max-width:80%;object-fit:contain;filter:drop-shadow(0 10px 30px rgba(255,140,40,.45));animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes entra{from{opacity:.3;transform:scale(1.04)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translate(-50%,-44%) scale(.85)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+.estrellas{position:absolute;inset:0;pointer-events:none}
+.estrellas i{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--oro);box-shadow:0 0 10px var(--oro);animation:brilla 2.4s ease-in-out infinite}
+@keyframes brilla{0%,100%{opacity:.2;transform:scale(.6)}50%{opacity:1;transform:scale(1)}}
+.barra{position:absolute;left:0;right:0;top:0;z-index:2;display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));background:linear-gradient(180deg,rgba(10,12,40,.45),transparent)}
+.redondo{flex:none;width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.22);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#fff;display:grid;place-items:center}
+.redondo svg{width:20px;height:20px}
+.segs{flex:1;display:flex;gap:5px}
+.segs i{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.3)}
+.segs i.on{background:#fff}
+.tarjeta{flex:none;position:relative;margin-top:-28px;background:var(--crema);border-radius:30px 30px 0 0;max-height:64%;overflow-y:auto;padding:22px max(20px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px}
+.tarjeta .in{max-width:520px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.paso{font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--naranja-txt)}
+.frase{margin:0;font-size:24px;line-height:1.25;font-weight:900;color:var(--tinta);text-wrap:pretty}
+.letra{margin:0;background:var(--blanco);border-radius:18px;padding:14px 16px;font-size:19px;font-weight:800;line-height:1.5;color:var(--tinta)}
+.letra span{display:block}
+.letra span.sep{height:10px}
+.verso{background:linear-gradient(135deg,#FFF3E2,#FFE6CC);border-radius:20px;padding:16px 18px;text-align:center}
+.verso q{display:block;font-size:20px;font-weight:800;line-height:1.35;quotes:"«" "»"}
+.verso cite{display:block;margin-top:8px;font-style:normal;font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--naranja-txt)}
+.verso b{display:inline-block;margin-top:10px;background:var(--grad);color:#fff;border-radius:999px;padding:6px 16px;font-size:18px;font-weight:900}
+.preguntas{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.preguntas li{background:var(--blanco);border-radius:16px;padding:12px 14px 12px 46px;font-size:18px;font-weight:800;position:relative;line-height:1.3}
+.preguntas li::before{content:attr(data-n);position:absolute;left:12px;top:11px;width:24px;height:24px;border-radius:50%;background:var(--naranja-suave);color:var(--naranja-txt);font-size:14px;font-weight:900;display:grid;place-items:center}
+.padres{display:flex;gap:12px;background:var(--blanco);border:1.5px solid var(--linea);border-radius:18px;padding:12px 14px}
+.padres i{flex:none;width:34px;height:34px;border-radius:10px;background:var(--naranja-suave);color:var(--naranja-txt);display:grid;place-items:center}
+.padres i svg{width:18px;height:18px}
+.padres small{display:block;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta)}
+.padres p{margin:2px 0 0;color:var(--suave);font-size:15px;font-weight:700;line-height:1.4}
+.abajo{display:flex;gap:12px;align-items:center;margin-top:2px}
+.audio{flex:1;min-width:0;display:flex;align-items:center;gap:12px;background:var(--blanco);border:1.5px solid var(--linea);border-radius:999px;padding:6px 16px 6px 6px;min-height:58px;text-align:left}
+.audio .pl{flex:none;width:44px;height:44px;border-radius:50%;background:var(--tinta);color:#fff;display:grid;place-items:center}
+.audio .pl svg{width:16px;height:16px}
+.onda{flex:1;display:flex;align-items:center;gap:3px;height:28px;min-width:0;overflow:hidden}
+.onda i{flex:none;width:3px;border-radius:2px;background:#D8CFC2}
+.onda i:nth-child(-n+5){background:var(--naranja)}
+.audio.sonando .onda i{animation:onda .8s ease-in-out infinite;background:var(--naranja)}
+@keyframes onda{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+.audio span.t{flex:none;font-size:14px;font-weight:800;color:var(--suave)}
+.sig{flex:none;width:58px;height:58px;border-radius:50%;border:0;background:var(--grad);color:#fff;display:grid;place-items:center;box-shadow:0 8px 18px rgba(255,122,47,.4)}
+.sig svg{width:24px;height:24px}
+.sig.texto{width:auto;padding:0 22px;border-radius:999px;font-size:18px;font-weight:900;gap:8px;display:flex;align-items:center}
+
+/* ---------- final ---------- */
+.fin{position:fixed;inset:0;z-index:30;overflow-y:auto;background:radial-gradient(70% 45% at 50% 22%,rgba(80,90,200,.35),transparent 70%),var(--noche);color:#fff}
+.fin .in{max-width:520px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));text-align:center;position:relative}
+.fin .heroe{width:min(300px,78%);margin:0 auto;-webkit-mask-image:radial-gradient(closest-side,#000 72%,transparent 100%);mask-image:radial-gradient(closest-side,#000 72%,transparent 100%);animation:salto 1s cubic-bezier(.2,1.5,.4,1)}
+@keyframes salto{0%{transform:scale(.5) translateY(30px);opacity:0}100%{transform:none;opacity:1}}
+.fin .eti{font-size:13px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--oro);margin-top:4px}
+.fin h2{margin:6px 0 4px;font-size:32px;font-weight:900;line-height:1.1}
+.fin p.sub{margin:0;color:#C9CBEA;font-size:17px}
+.figu{display:flex;gap:14px;align-items:center;text-align:left;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:12px;margin-top:22px;animation:sube .6s .3s both ease-out}
+@keyframes sube{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.figu img{width:76px;height:76px;border-radius:14px;object-fit:cover;border:3px solid var(--oro);flex:none}
+.figu small{display:block;color:#C9CBEA;font-size:13px;font-weight:700}
+.figu b{display:block;font-size:18px;font-weight:900;line-height:1.2}
+.crece{background:var(--crema);color:var(--tinta);border-radius:22px;padding:14px 16px 16px;margin-top:12px;text-align:left;animation:sube .6s .5s both ease-out}
+.crece .top{display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:900;flex-wrap:wrap}
+.crece .top span{color:var(--suave);font-weight:800}
+.etapas{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:10px 0 12px;min-height:96px}
+.etapas img{object-fit:contain;transition:transform .3s}
+.etapas img.e1{height:44px} .etapas img.e2{height:68px} .etapas img.e3{height:96px}
+.etapas img.off{filter:grayscale(1) opacity(.35)}
+.etapas img.yo{transform:scale(1.12);filter:drop-shadow(0 4px 10px rgba(255,122,47,.5))}
+.prog{height:10px;background:var(--crema-2);border-radius:6px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--grad);border-radius:6px;transition:width .8s ease-out}
+.fin .cta{margin-top:18px}
+.link{background:none;border:0;color:#C9CBEA;font-weight:800;font-size:16px;padding:14px;margin-top:4px;text-decoration:underline;text-underline-offset:4px}
+.confeti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.confeti i{position:absolute;top:-20px;width:9px;height:14px;border-radius:3px;animation:cae linear forwards}
+@keyframes cae{to{transform:translateY(110vh) rotate(720deg)}}
+
+/* ---------- álbum ---------- */
+h1.grande{font-size:30px;font-weight:900;margin:8px 0 2px;letter-spacing:-.01em}
+.sub2{margin:0;color:var(--suave);font-size:16px}
+.prog.alb{margin-top:12px;background:var(--crema-2)}
+.grilla{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}
+.cel{aspect-ratio:3/4;border-radius:16px;position:relative;overflow:hidden;border:0;padding:0;background:none;text-align:left}
+.cel.tengo{box-shadow:0 6px 14px rgba(60,40,20,.18);border:3px solid var(--oro)}
+.cel.tengo img{width:100%;height:100%;object-fit:cover}
+.cel.tengo span{position:absolute;left:0;right:0;bottom:0;padding:18px 7px 6px;background:linear-gradient(transparent,rgba(10,12,40,.85));color:#fff;font-size:11.5px;font-weight:800;line-height:1.15}
+.cel .num{position:absolute;top:6px;left:6px;background:rgba(255,255,255,.92);color:var(--tinta);font-size:11px;font-weight:900;border-radius:8px;padding:1px 6px}
+.cel.falta{border:2px dashed #DCCFBA;background:var(--crema-2);display:grid;place-items:center;color:#C4B59E;font-size:30px;font-weight:900;cursor:default}
+.cel.falta.prox{border-color:var(--naranja-2);color:var(--naranja-txt);font-size:12px;font-weight:800;text-align:center;padding:8px;line-height:1.2;cursor:pointer}
+
+/* ---------- padres ---------- */
+.caja{background:var(--blanco);border:1.5px solid var(--linea);border-radius:22px;padding:16px;margin-top:12px}
+.caja h3{margin:0 0 8px;font-size:18px;font-weight:900}
+.caja p{margin:0 0 8px;color:var(--suave);font-weight:700}
+.caja p:last-child{margin-bottom:0}
+.tips{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;counter-reset:t}
+.tips li{position:relative;padding-left:38px;color:var(--suave);font-weight:700}
+.tips li b{color:var(--tinta)}
+.tips li::before{counter-increment:t;content:counter(t);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;background:var(--naranja-suave);color:var(--naranja-txt);font-weight:900;font-size:14px;display:grid;place-items:center}
+form{display:flex;flex-direction:column;gap:12px;margin:0}
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:800;color:var(--suave)}
+.campo{border:2px solid var(--linea);background:var(--crema);border-radius:14px;padding:12px 14px;min-height:50px;font-size:17px;font-weight:700;color:var(--tinta);width:100%}
+.campo:focus{outline:none;border-color:var(--naranja)}
+.boton{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 18px;border-radius:14px;border:2px solid var(--linea);background:var(--blanco);font-weight:900;font-size:16px;color:var(--tinta)}
+.boton.peligro{color:#B4322A}
+.boton.armado{background:#B4322A;border-color:#B4322A;color:#fff}
+.lista{display:flex;flex-direction:column;gap:8px}
+.fila{display:flex;align-items:center;gap:12px;background:var(--crema);border-radius:16px;padding:8px;border:0;text-align:left;width:100%}
+.fila img{width:52px;height:52px;border-radius:12px;object-fit:cover;flex:none}
+.fila div{flex:1;min-width:0}
+.fila small{display:block;color:var(--naranja-txt);font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase}
+.fila b{display:block;font-weight:800;line-height:1.2}
+.fila em{flex:none;font-style:normal;font-size:13px;font-weight:900;color:#2E8A55;background:#E2F4E8;border-radius:999px;padding:3px 10px}
+.compartir{display:flex;gap:8px;align-items:center;background:var(--crema);border-radius:14px;padding:6px 6px 6px 12px}
+.compartir code{flex:1;min-width:0;font:700 14px/1.3 ui-monospace,Menlo,monospace;color:var(--tinta);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;user-select:all}
+.pie{text-align:center;color:var(--tenue);font-size:13px;margin-top:26px}
+.pie q{display:block;font-size:15px;font-weight:800;color:var(--suave);margin-bottom:6px;quotes:"«" "»"}
+
+/* ---------- bienvenida ---------- */
+.bien{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;justify-content:center;text-align:center;background:radial-gradient(80% 50% at 50% 25%,rgba(255,150,60,.3),transparent 70%),var(--noche);color:#fff;padding:calc(24px + env(safe-area-inset-top,0px)) max(22px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(22px,env(safe-area-inset-left,0px))}
+.bien .in{max-width:440px;margin:0 auto;width:100%}
+.bien img{width:170px;margin:0 auto;filter:drop-shadow(0 10px 30px rgba(255,140,40,.5));animation:flota 3.2s ease-in-out infinite}
+.bien h1{font-size:32px;font-weight:900;margin:14px 0 6px;line-height:1.1}
+.bien p{color:#C9CBEA;margin:0 0 20px;font-size:17px}
+.bien form{text-align:left;background:var(--crema);color:var(--tinta);border-radius:24px;padding:18px}
+.bien .campo{background:var(--blanco)}
+
+/* hoja (figurita grande) */
+.hoja{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.hoja .velo{position:absolute;inset:0;background:rgba(10,12,40,.6);border:0}
+.hoja .pan{position:relative;width:100%;max-width:520px;background:var(--crema);border-radius:28px 28px 0 0;padding:16px max(20px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));max-height:92%;overflow-y:auto;animation:sube .3s ease-out;text-align:center}
+.hoja .pan img{width:min(260px,70%);aspect-ratio:3/4;object-fit:cover;border-radius:20px;border:4px solid var(--oro);margin:6px auto 14px;box-shadow:0 10px 24px rgba(60,40,20,.25)}
+.hoja h3{margin:0;font-size:24px;font-weight:900}
+.hoja .verso{margin-top:14px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));background:var(--tinta);color:#fff;border-radius:14px;padding:10px 16px;font-weight:800;z-index:50;max-width:calc(100% - 36px);text-align:center}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div id="app"></div>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(function(){
+"use strict";
+var C=window.ALTAR_KIDS, SEM=C.SEMANAS, KEY="altarkids.v1";
+var PASOS=[
+  {k:"oramos",n:"Oramos",pose:"img/chispita-oramos.webp"},
+  {k:"cantamos",n:"Cantamos",pose:"img/chispita-cantamos.webp"},
+  {k:"historia",n:"La historia",pose:"img/chispita-historia.webp"},
+  {k:"versiculo",n:"El versículo",pose:"img/chispita-versiculo.webp"},
+  {k:"hablamos",n:"Hablamos",pose:"img/chispita-hablamos.webp"},
+  {k:"gracias",n:"Gracias",pose:"img/chispita-gracias.webp"}
+];
+var ETAPAS=[{img:"img/etapa-1.webp",n:"Chispita"},{img:"img/etapa-2.webp",n:"Fueguito"},{img:"img/etapa-3.webp",n:"Fogata"}];
+var I={
+  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15a1 1 0 0 0 1.5.86l12.5-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5z"/></svg>',
+  stop:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>',
+  next:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  padres:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="3.2"/><path d="M3 20c.6-3.4 3-5.4 6-5.4s5.4 2 6 5.4"/><path d="M19 8v6M16 11h6"/></svg>',
+  llama:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4 0 7-2.8 7-6.8 0-3.6-2.6-6-4-8.2-.6 2-1.6 3-3 3.4.4-3-1-6-3.6-8.4C8.6 6 5 9 5 15.2 5 19.2 8 22 12 22z"/><path d="M12 22c-1.7 0-3-1.3-3-3.1 0-2 1.6-3.1 3-4.9 1.4 1.8 3 2.9 3 4.9 0 1.8-1.3 3.1-3 3.1z"/></svg>',
+  album:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>',
+  familia:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M2.5 20c.6-3.4 2.8-5.3 5.5-5.3s4.9 1.9 5.5 5.3M14 15.2c.9-.5 1.9-.8 3-.8 2.3 0 4 1.6 4.5 4.6"/></svg>',
+  oramos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.5s-7.5-4.6-9.5-9.3C1.2 8 3.3 4.5 6.8 4.5c2.2 0 3.7 1.3 5.2 3.1 1.5-1.8 3-3.1 5.2-3.1 3.5 0 5.6 3.5 4.3 6.7-2 4.7-9.5 9.3-9.5 9.3z"/></svg>',
+  historia:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 5h6a3.5 3.5 0 0 1 3.5 3.5V20a2.6 2.6 0 0 0-2.6-2.6H2.5z"/><path d="M21.5 5h-6A3.5 3.5 0 0 0 12 8.5V20a2.6 2.6 0 0 1 2.6-2.6h6.9z"/></svg>',
+  versiculo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z"/></svg>',
+  cantamos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>',
+  check:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>'
+};
+
+/* ---------- datos guardados ---------- */
+function cargar(){try{var r=localStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){return null}}
+var S=cargar()||{familia:"",chicos:"",hechos:[]};
+function guardar(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(m){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]})};
+
+/* ---------- fechas y progreso ---------- */
+function hoyISO(){var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)}
+function parse(s){var p=s.split("-").map(Number);return new Date(p[0],p[1]-1,p[2])}
+function lunes(d){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());var w=(x.getDay()+6)%7;x.setDate(x.getDate()-w);return x}
+function claveSemana(d){var l=lunes(d);return l.getFullYear()+"-"+(l.getMonth()+1)+"-"+l.getDate()}
+function semanasDesdeInicio(){return Math.floor((lunes(new Date())-lunes(parse(C.INICIO)))/(7*864e5))}
+function habilitadas(){var n=semanasDesdeInicio()+1;return SEM.filter(function(s){return s.n<=Math.max(1,n)})}
+function actual(){var h=habilitadas();return h[h.length-1]||SEM[0]}
+function hizo(id){return S.hechos.some(function(h){return h.id===id})}
+function figuritas(){var v={};S.hechos.forEach(function(h){v[h.id]=1});return SEM.filter(function(s){return v[s.id]})}
+function racha(){
+  var set={};S.hechos.forEach(function(h){set[claveSemana(parse(h.f))]=1});
+  var d=lunes(new Date()),n=0;
+  if(!set[claveSemana(d)])d.setDate(d.getDate()-7);
+  while(set[claveSemana(d)]){n++;d.setDate(d.getDate()-7)}
+  return n;
+}
+function etapa(){var n=S.hechos.length;return n>=C.CRECER[1]?2:n>=C.CRECER[0]?1:0}
+function nombreChicos(){return (S.chicos||"").trim()||"campeón"}
+function semPorId(id){return SEM.find(function(s){return s.id===id})}
+
+/* ---------- narración ---------- */
+var voz=null,habla=("speechSynthesis" in window);
+function elegirVoz(){if(!habla)return;var v=speechSynthesis.getVoices();voz=v.find(function(x){return /es[-_](AR|419|US|MX)/i.test(x.lang)})||v.find(function(x){return /^es/i.test(x.lang)})||null}
+if(habla){elegirVoz();speechSynthesis.onvoiceschanged=elegirVoz}
+function callar(){if(habla)speechSynthesis.cancel();var a=document.querySelector(".audio");if(a){a.classList.remove("sonando");a.querySelector(".pl").innerHTML=I.play}}
+function hablar(t){
+  if(!habla)return;
+  if(speechSynthesis.speaking){callar();return}
+  var u=new SpeechSynthesisUtterance(t.replace(/[«»"]/g,""));u.lang=voz?voz.lang:"es-AR";if(voz)u.voice=voz;u.rate=.92;u.pitch=1.08;
+  var a=document.querySelector(".audio");
+  u.onend=u.onerror=function(){if(a){a.classList.remove("sonando");a.querySelector(".pl").innerHTML=I.play}};
+  if(a){a.classList.add("sonando");a.querySelector(".pl").innerHTML=I.stop}
+  speechSynthesis.speak(u);
+}
+
+/* ---------- estado de pantalla ---------- */
+var vista="altar",R=null,ultimoGanado=null;
+var app=document.getElementById("app");
+function toast(m){var e=document.getElementById("toast");e.textContent=m;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},2400)}
+
+function nav(){
+  return '<nav class="nav" aria-label="Secciones">'+
+    '<button data-a="ver" data-v="altar" class="'+(vista==="altar"?"on":"")+'">'+I.llama+'Altar</button>'+
+    '<button data-a="ver" data-v="album" class="'+(vista==="album"?"on":"")+'">'+I.album+'Álbum</button>'+
+    '<button data-a="ver" data-v="padres" class="'+(vista==="padres"?"on":"")+'">'+I.familia+'Padres</button></nav>';
+}
+
+/* ---------- bienvenida ---------- */
+function vBienvenida(){
+  return '<div class="bien"><div class="in"><img src="img/chispita.webp" alt="Chispita">'+
+  '<h1>¡Hola! Soy Chispita</h1><p>Cada semana hacemos un altar en familia: una historia de la Biblia, una canción y una oración. Son 8 minutos juntos.</p>'+
+  '<form id="f-bien"><label>Apellido de la familia<input class="campo" name="familia" id="b-fam" required autocomplete="family-name" placeholder="Ej.: Benito"></label>'+
+  '<label>Nombre de los chicos<input class="campo" name="chicos" id="b-chicos" required placeholder="Ej.: Sofi y Tomi"></label>'+
+  '<button class="cta" type="submit">¡Empezar!</button></form></div></div>';
+}
+
+/* ---------- inicio ---------- */
+function vAltar(){
+  var s=actual(),figs=figuritas().length,r=racha(),et=ETAPAS[etapa()],h=habilitadas();
+  var out='<div class="pag"><div class="saludo"><div><small>Familia '+esc(S.familia)+'</small><h1>¡Hola, '+esc(nombreChicos())+'!</h1></div><img src="'+et.img+'" alt="'+et.n+'"></div>'+
+  '<article class="semana"><img src="'+s.portada+'" alt=""><div class="txt"><span class="chip">Semana '+s.n+' · '+esc(s.ref)+'</span><h2>'+esc(s.titulo)+'</h2><p>Altar en familia · '+s.minutos+' minutos</p>'+
+  (hizo(s.id)?'<span class="hecho">'+I.check+'Ya lo hicieron. ¡Pueden repetirlo!</span>':'')+
+  '<button class="cta" data-a="empezar" data-id="'+s.id+'" data-p="0">'+I.play+'Comenzar juntos</button></div></article>'+
+  '<div class="titulo">El altar de hoy</div><div class="momentos">'+
+  [["oramos","Oramos",0],["historia","Historia",2],["versiculo","Versículo",3],["cantamos","Cantamos",1]].map(function(m){return '<button class="mom" data-a="empezar" data-id="'+s.id+'" data-p="'+m[2]+'">'+I[m[0]]+m[1]+'</button>'}).join("")+
+  '</div><div class="stats"><div class="stat"><img src="img/etapa-1.webp" alt=""><div><b>'+r+'</b><span>'+(r===1?"semana seguida":"semanas seguidas")+'</span></div></div>'+
+  '<button class="stat" data-a="ver" data-v="album" style="font:inherit;cursor:pointer"><img class="fig" src="'+(figs?figuritas()[figs-1].portada:s.portada)+'" alt=""><div><b>'+figs+'<small>/'+C.TOTAL_FIGURITAS+'</small></b><span>figuritas</span></div></button></div>';
+  var otras=h.filter(function(x){return x.id!==s.id});
+  if(otras.length) out+='<div class="titulo">Otras historias</div><div class="otras">'+otras.reverse().map(function(x){return '<button class="otra" data-a="empezar" data-id="'+x.id+'" data-p="0"><img src="'+x.portada+'" alt=""><div><small>Semana '+x.n+(hizo(x.id)?' · ✓':'')+'</small><b>'+esc(x.titulo)+'</b></div></button>'}).join("")+'</div>';
+  return out+'</div>'+nav();
+}
+
+/* ---------- recorrido ---------- */
+function totalSub(){return 5+R.s.historia.length}
+function subIndex(){var i=0;for(var p=0;p<R.p;p++)i+=PASOS[p].k==="historia"?R.s.historia.length:1;return i+(PASOS[R.p].k==="historia"?R.e:0)}
+function vRecorrido(){
+  var s=R.s,P=PASOS[R.p],k=P.k,vis,cuerpo="",guia="",leer="";
+  var segs="";for(var i=0,n=totalSub(),c=subIndex();i<n;i++)segs+='<i class="'+(i<=c?"on":"")+'"></i>';
+  if(k==="historia"){var e=s.historia[R.e];vis='<div class="vis"><img class="esc" src="'+e.img+'" alt="">';cuerpo='<p class="frase">'+esc(e.nino)+'</p>';guia=e.padres;leer=e.nino}
+  else{
+    vis='<div class="vis pose"><div class="estrellas">'+estrellas()+'</div><img src="'+P.pose+'" alt="Chispita">';
+    if(k==="oramos"){cuerpo='<p class="frase">'+esc(s.oramos.nino)+'</p>';guia=s.oramos.padres;leer=s.oramos.nino}
+    if(k==="cantamos"){cuerpo='<p class="frase">Cantamos: «'+esc(s.cantamos.titulo)+'»</p><p class="letra">'+s.cantamos.letra.map(function(l){return l?'<span>'+esc(l)+'</span>':'<span class="sep"></span>'}).join("")+'</p>';guia=s.cantamos.padres;leer=s.cantamos.letra.filter(Boolean).join(" ")}
+    if(k==="versiculo"){var v=s.versiculo;cuerpo='<p class="frase">Aprendemos el versículo de la semana:</p><div class="verso"><q>'+esc(v.texto)+'</q><cite>'+esc(v.cita)+'</cite><b>'+esc(v.corto)+'</b></div>';guia=v.padres;leer=v.texto+" "+v.cita.replace(":"," ")+". "+v.corto}
+    if(k==="hablamos"){var hb=s.hablamos;cuerpo='<p class="frase">'+esc(hb.nino)+'</p><ol class="preguntas">'+hb.preguntas.map(function(q,i){return '<li data-n="'+(i+1)+'">'+esc(q)+'</li>'}).join("")+'</ol>';guia=hb.padres;leer=hb.nino+" "+hb.preguntas.join(" ")}
+    if(k==="gracias"){cuerpo='<p class="frase">'+esc(s.gracias.nino)+'</p>';guia=s.gracias.padres;leer=s.gracias.nino}
+  }
+  var ultimo=(R.p===PASOS.length-1);
+  R.leer=leer;
+  return '<div class="rec">'+vis+'<div class="barra"><button class="redondo" data-a="salir" aria-label="Salir">'+I.x+'</button><div class="segs">'+segs+'</div>'+
+    ((R.p>0||R.e>0)?'<button class="redondo" data-a="atras" aria-label="Volver">'+I.back+'</button>':'')+'</div></div>'+
+    '<div class="tarjeta"><div class="in"><div class="paso">Paso '+(R.p+1)+' de '+PASOS.length+' · '+P.n+(k==="historia"?' ('+(R.e+1)+'/'+s.historia.length+')':'')+'</div>'+cuerpo+
+    '<div class="padres"><i>'+I.padres+'</i><div><small>Para papá y mamá</small><p>'+esc(guia)+'</p></div></div>'+
+    '<div class="abajo">'+(habla?'<button class="audio" data-a="escuchar"><span class="pl">'+I.play+'</span><span class="onda">'+onda()+'</span><span class="t">Escuchar</span></button>':'<span style="flex:1"></span>')+
+    (ultimo?'<button class="sig texto" data-a="sig">¡Amén!</button>':'<button class="sig" data-a="sig" aria-label="Siguiente">'+I.next+'</button>')+'</div></div></div></div>';
+}
+function onda(){var h=[10,18,26,14,22,12,20,28,16,10,24,14,8,18,12,22,10,16];return h.map(function(x,i){return '<i style="height:'+x+'px;animation-delay:'+(i*.06)+'s"></i>'}).join("")}
+function estrellas(){var o="",p=[[12,22],[82,18],[22,70],[88,62],[50,12],[8,46],[70,80],[35,30]];p.forEach(function(q,i){o+='<i style="left:'+q[0]+'%;top:'+q[1]+'%;animation-delay:'+(i*.3)+'s"></i>'});return o}
+function siguiente(){
+  callar();var P=PASOS[R.p];
+  if(P.k==="historia"&&R.e<R.s.historia.length-1){R.e++;return pintar()}
+  if(R.p<PASOS.length-1){R.p++;R.e=0;return pintar()}
+  terminar();
+}
+function atras(){
+  callar();var P=PASOS[R.p];
+  if(P.k==="historia"&&R.e>0){R.e--;return pintar()}
+  if(R.p>0){R.p--;R.e=PASOS[R.p].k==="historia"?R.s.historia.length-1:0;pintar()}
+}
+function terminar(){
+  var nueva=!hizo(R.s.id);
+  S.hechos.push({id:R.s.id,f:hoyISO()});guardar();
+  ultimoGanado={s:R.s,nueva:nueva};R=null;vista="fin";pintar();
+}
+
+/* ---------- final ---------- */
+function vFin(){
+  var g=ultimoGanado,s=g.s,n=S.hechos.length,et=etapa(),idx=figuritas().map(function(x){return x.id}).indexOf(s.id)+1;
+  var meta=et===0?C.CRECER[0]:et===1?C.CRECER[1]:null, desde=et===0?0:et===1?C.CRECER[0]:C.CRECER[1];
+  var pct=meta?Math.round((n-desde)/(meta-desde)*100):100;
+  var falta=meta?(meta-n):0;
+  var txtCrece=meta?(ETAPAS[et+1].n+" en "+falta+(falta===1?" altar":" altares")):"¡Ya es una fogata!";
+  return '<div class="fin"><div class="confeti">'+confeti()+'</div><div class="in">'+
+   '<img class="heroe" src="img/fest.webp" alt="Chispita festejando">'+
+   '<div class="eti">Altar completado</div><h2>¡Lo hicieron juntos!</h2><p class="sub">'+(g.nueva?esc(nombreChicos())+' ganó una figurita nueva':'¡Repasaron esta historia otra vez!')+'</p>'+
+   '<div class="figu"><img src="'+s.portada+'" alt=""><div><small>Figurita '+s.n+' de '+C.TOTAL_FIGURITAS+'</small><b>'+esc(s.titulo)+'</b><small>'+esc(s.ref)+' · «'+esc(s.frase.replace(/^¡|!$/g,""))+'»</small></div></div>'+
+   '<div class="crece"><div class="top">'+ETAPAS[et].n+' está creciendo<span>'+txtCrece+'</span></div><div class="etapas">'+
+   ETAPAS.map(function(e,i){return '<img class="e'+(i+1)+(i>et?" off":"")+(i===et?" yo":"")+'" src="'+e.img+'" alt="'+e.n+'">'}).join("")+
+   '</div><div class="prog"><i style="width:'+pct+'%"></i></div></div>'+
+   '<button class="cta" data-a="ver" data-v="album">Ver mi álbum</button><button class="link" data-a="ver" data-v="altar">Volver al inicio</button></div></div>';
+}
+function confeti(){var o="",c=["#FFB23E","#FF7A2F","#FFD27A","#7FD1FF","#FF8FB1","#9BE38C"];for(var i=0;i<36;i++)o+='<i style="left:'+(Math.random()*100)+'%;background:'+c[i%c.length]+';animation-duration:'+(2.4+Math.random()*2)+'s;animation-delay:'+(Math.random()*.8)+'s"></i>';return o}
+
+/* ---------- álbum ---------- */
+function vAlbum(){
+  var figs=figuritas(),ids={};figs.forEach(function(f){ids[f.id]=1});
+  var h=habilitadas(),pct=Math.round(figs.length/C.TOTAL_FIGURITAS*100);
+  var cel="";
+  for(var i=1;i<=C.TOTAL_FIGURITAS;i++){
+    var s=SEM.find(function(x){return x.n===i});
+    if(s&&ids[s.id]) cel+='<button class="cel tengo" data-a="figu" data-id="'+s.id+'"><img src="'+s.portada+'" alt=""><i class="num">'+i+'</i><span>'+esc(s.titulo)+'</span></button>';
+    else if(s&&h.indexOf(s)>=0) cel+='<button class="cel falta prox" data-a="empezar" data-id="'+s.id+'" data-p="0">Semana '+i+'<br>¡Hacé el altar para ganarla!</button>';
+    else cel+='<div class="cel falta" aria-label="Figurita '+i+' por descubrir">'+i+'</div>';
+  }
+  return '<div class="pag"><h1 class="grande">Mi álbum</h1><p class="sub2">'+figs.length+' de '+C.TOTAL_FIGURITAS+' figuritas · una por cada historia</p><div class="prog alb"><i style="width:'+pct+'%"></i></div><div class="grilla">'+cel+'</div></div>'+nav();
+}
+function hojaFigu(id){
+  var s=semPorId(id);
+  var d=document.createElement("div");d.className="hoja";d.innerHTML='<button class="velo" data-a="cerrarhoja" aria-label="Cerrar"></button><div class="pan" role="dialog" aria-modal="true"><img src="'+s.portada+'" alt=""><small class="paso">Figurita '+s.n+' · '+esc(s.ref)+'</small><h3>'+esc(s.titulo)+'</h3><div class="verso"><q>'+esc(s.versiculo.texto)+'</q><cite>'+esc(s.versiculo.cita)+'</cite><b>'+esc(s.versiculo.corto)+'</b></div><button class="cta" data-a="empezar" data-id="'+s.id+'" data-p="0">Repetir esta historia</button></div>';
+  document.body.appendChild(d);
+}
+
+/* ---------- padres ---------- */
+function vPadres(){
+  var h=habilitadas();
+  var url=location.href.split("#")[0];
+  return '<div class="pag"><h1 class="grande">Para papá y mamá</h1><p class="sub2">«Instruye al niño en su camino». Proverbios 22:6</p>'+
+  '<div class="caja"><h3>Cómo hacer el altar</h3><ol class="tips">'+
+  '<li><b>Elijan un momento fijo.</b> Antes de dormir o después de cenar. Son 8 minutos.</li>'+
+  '<li><b>Siéntense juntos</b> con el celular en el medio. Apaguen la tele.</li>'+
+  '<li><b>Lean ustedes o toquen «Escuchar».</b> La frase grande es para los chicos; el recuadro es una guía para ustedes.</li>'+
+  '<li><b>No importa si se distraen.</b> Lo valioso es hacerlo juntos, cada semana.</li></ol></div>'+
+  '<div class="caja"><h3>Todas las historias</h3><div class="lista">'+h.slice().reverse().map(function(s){return '<button class="fila" data-a="empezar" data-id="'+s.id+'" data-p="0"><img src="'+s.portada+'" alt=""><div><small>Semana '+s.n+' · '+esc(s.ref)+'</small><b>'+esc(s.titulo)+'</b></div>'+(hizo(s.id)?'<em>Hecha</em>':'')+'</button>'}).join("")+'</div>'+
+  (SEM.length>h.length?'<p style="margin-top:10px">Cada lunes se suma una historia nueva.</p>':'')+'</div>'+
+  '<div class="caja"><h3>Nuestra familia</h3><form id="f-fam"><label>Apellido de la familia<input class="campo" name="familia" id="p-fam" required value="'+esc(S.familia)+'"></label><label>Nombre de los chicos<input class="campo" name="chicos" id="p-chicos" required value="'+esc(S.chicos)+'"></label><button class="boton" type="submit">Guardar</button></form></div>'+
+  '<div class="caja"><h3>Invitá a otra familia</h3><p>Compartí este link para que hagan el altar con sus chicos.</p><div class="compartir"><code>'+esc(url)+'</code><button class="boton" data-a="copiar">Copiar</button></div></div>'+
+  '<div class="caja"><h3>Empezar de nuevo</h3><p>Borra las figuritas y el progreso de este celular.</p><button class="boton peligro" data-a="reiniciar">Borrar progreso</button></div>'+
+  '<div class="pie"><q>Instruye al niño en su camino, y aun cuando fuere viejo no se apartará de él.</q>Iglesia Altar · Charata<br>Textos bíblicos: Reina-Valera 1960 © Sociedades Bíblicas en América Latina, 1960. Renovado © Sociedades Bíblicas Unidas, 1988. Utilizado con permiso.</div></div>'+nav();
+}
+
+/* ---------- pintar ---------- */
+function pintar(){
+  var y=window.scrollY;
+  document.querySelectorAll(".hoja").forEach(function(h){h.remove()});
+  if(!S.familia){app.innerHTML=vBienvenida();return}
+  if(R){app.innerHTML=vRecorrido();return}
+  if(vista==="fin"&&ultimoGanado){app.innerHTML=vFin();window.scrollTo(0,0);return}
+  app.innerHTML=vista==="album"?vAlbum():vista==="padres"?vPadres():vAltar();
+  window.scrollTo(0,0);
+}
+
+document.addEventListener("click",function(ev){
+  var b=ev.target.closest("[data-a]");if(!b)return;
+  var a=b.getAttribute("data-a");
+  if(a==="ver"){vista=b.getAttribute("data-v");ultimoGanado=vista==="fin"?ultimoGanado:null;pintar()}
+  else if(a==="empezar"){R={s:semPorId(b.getAttribute("data-id")),p:+b.getAttribute("data-p")||0,e:0};pintar()}
+  else if(a==="sig")siguiente();
+  else if(a==="atras")atras();
+  else if(a==="salir"){callar();R=null;vista="altar";pintar()}
+  else if(a==="escuchar")hablar(R.leer||"");
+  else if(a==="figu")hojaFigu(b.getAttribute("data-id"));
+  else if(a==="cerrarhoja"){b.closest(".hoja").remove()}
+  else if(a==="copiar"){var u=location.href.split("#")[0];var p=navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(u):Promise.reject();p.then(function(){toast("Link copiado")},function(){toast(u)})}
+  else if(a==="reiniciar"){
+    if(!b.classList.contains("armado")){b.classList.add("armado");b.textContent="Tocá de nuevo para borrar";setTimeout(function(){if(b.isConnected){b.classList.remove("armado");b.textContent="Borrar progreso"}},3500);return}
+    S.hechos=[];guardar();toast("Progreso borrado");pintar();
+  }
+});
+document.addEventListener("submit",function(ev){
+  ev.preventDefault();var f=ev.target,fd=new FormData(f);
+  var fam=(fd.get("familia")||"").trim(),ch=(fd.get("chicos")||"").trim();if(!fam||!ch)return;
+  S.familia=fam;S.chicos=ch;guardar();
+  if(f.id==="f-fam")toast("Guardado");
+  vista="altar";pintar();
+});
+document.addEventListener("keydown",function(e){
+  if(!R)return;
+  if(e.key==="ArrowRight")siguiente();else if(e.key==="ArrowLeft")atras();else if(e.key==="Escape"){callar();R=null;pintar()}
+});
+pintar();
+})();
+</script>
+
+</body>
+</html>
