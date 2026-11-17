@@ -544,7 +544,7 @@ function vRecorrido(){
     '<button class="redondo'+(musicaOn()?' on':'')+'" id="btn-musica" data-a="musica" aria-label="Música de fondo" aria-pressed="'+musicaOn()+'">'+I.nota+'</button>'+
     ((R.p>0||R.e>0)?'<button class="redondo" data-a="atras" aria-label="Volver">'+I.back+'</button>':'')+'</div></div>'+
     '<div class="tarjeta"><div class="in"><div class="paso">Paso '+(R.p+1)+' de '+PASOS.length+' · '+P.n+(k==="historia"?' ('+(R.e+1)+'/'+s.historia.length+')':'')+'</div>'+cuerpo+
-    '<div class="padres"><i>'+I.padres+'</i><div><small>Para papá y mamá</small><p>'+esc(guia)+'</p></div></div>'+
+    (k==="conversamos"?'<div class="padres"><i>'+I.padres+'</i><div><small>Para papá y mamá</small><p>'+esc(guia)+'</p></div></div>':'')+
     '<button class="cta chico" data-a="sig">'+(ultimo?'Amén':'Siguiente '+I.next)+'</button></div></div></div>';
 }
 function callar(){}
@@ -578,8 +578,31 @@ function atras(){
   if(P.k==="historia"&&R.e>0){R.e--;return pintar()}
   if(R.p>0){R.p--;R.e=PASOS[R.p].k==="historia"?R.s.historia.length-1:0;pintar()}
 }
+// Sonido mágico al decir «Amén»: campanitas que suben y un brillo, hecho con el celular (sin archivos).
+var ctxSonido=null;
+function sonidoMagico(){
+  try{
+    ctxSonido=ctxSonido||new (window.AudioContext||window.webkitAudioContext)();
+    var ctx=ctxSonido;if(ctx.state==="suspended")ctx.resume();
+    var t0=ctx.currentTime+.02,master=ctx.createGain();master.gain.value=.5;master.connect(ctx.destination);
+    var eco=ctx.createDelay();eco.delayTime.value=.18;var ecoG=ctx.createGain();ecoG.gain.value=.28;
+    master.connect(eco);eco.connect(ecoG);ecoG.connect(eco);ecoG.connect(ctx.destination);
+    function campana(f,t,dur,vol){
+      [[1,"sine",1],[2.01,"sine",.35],[3.02,"triangle",.12]].forEach(function(h){
+        var o=ctx.createOscillator(),g=ctx.createGain();o.type=h[1];o.frequency.value=f*h[0];
+        g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol*h[2],t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+        o.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.05);
+      });
+    }
+    // arpegio ascendente (Do mayor con 9na) y acorde final brillante
+    [523.25,659.25,783.99,987.77,1174.66,1318.51,1567.98,2093].forEach(function(f,i){campana(f,t0+i*.075,1.1,.22)});
+    [1046.5,1318.51,1567.98,2093].forEach(function(f){campana(f,t0+.68,2.2,.13)});
+    // destellos agudos al azar
+    for(var i=0;i<10;i++)campana(2600+Math.random()*2400,t0+.7+Math.random()*1.1,.35,.05);
+  }catch(e){}
+}
 function terminar(){
-  var nueva=!hizo(R.s.id);apagarMusica();
+  var nueva=!hizo(R.s.id);apagarMusica();sonidoMagico();
   S.hechos.push({id:R.s.id,f:hoyISO()});guardar();
   ultimoGanado={s:R.s,nueva:nueva};R=null;vista="fin";pintar();
 }
@@ -629,7 +652,7 @@ function vPadres(){
   '<div class="caja"><h3>Cómo hacer el altar</h3><ol class="tips">'+
   '<li><b>Elijan un momento fijo.</b> Antes de dormir o después de cenar. Son unos 10 minutos.</li>'+
   '<li><b>Siéntense juntos</b> con el celular en el medio. Apaguen la tele.</li>'+
-  '<li><b>Un adulto lee en voz alta.</b> El texto grande es para todos; el recuadro «Para papá y mamá» es una guía para ustedes.</li>'+
+  '<li><b>Un adulto lee en voz alta.</b> En el paso «Conversamos» hay una guía para ustedes, en el recuadro «Para papá y mamá».</li>'+
   '<li><b>Sigan los mismos pasos que en Altar en Casa:</b> invocamos su nombre, la historia, conversamos, y oración y adoración. Suena de fondo la misma música de Altar en Casa; se apaga con el botón ♪.</li>'+
   '<li><b>No importa si se distraen.</b> Lo valioso es hacerlo juntos, cada semana.</li></ol></div>'+
   '<div class="caja"><h3>Modelo de oración para los chicos</h3><p>'+esc(C.MODELO_PADRES)+'</p>'+modeloOracion("")+'</div>'+
